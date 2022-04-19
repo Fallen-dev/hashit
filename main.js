@@ -69,7 +69,7 @@ const helpText = 'put a link here'
 let generate_hash = ''
 
 input.value = helpText
-submit.disabled = true
+disable_on_keyup
 
 input.onfocus = (e) => {
   e.target.value = ''
