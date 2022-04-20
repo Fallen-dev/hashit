@@ -2,7 +2,8 @@
 import { log, log_err, toString, toObject, getElement, save_to_storage, get_from_storage } from "./utils.js"
 
 // DOM stuff
-const main = getElement('#main')
+const home = getElement('#home')
+const Nlist = getElement('#list')
 
 const input = getElement("textarea");
 const submit = getElement("input[type=submit]");
@@ -11,14 +12,16 @@ const hash_card = getElement('#hash')
 const hash_tag = getElement('#hash-tag')
 const hash_tip = getElement('#hash-tip')
 
+const search_card = getElement('#search-card')
+const search_input = getElement('#search-text')
+
 const error_card = getElement('#error')
 const error_title = getElement('#error-title')
 const error_content = getElement('#error-content')
 const error_tip = getElement('#error-tip')
 
-const errortext = getElement("h3#error");
-const hashStr = getElement("h1#hash");
-const search = getElement('p#search')
+const nav_home = getElement('p#nav-home')
+const nav_list = getElement('p#nav-list')
 
 const validateURL = (url) => {
   const pattern = new RegExp(
@@ -90,11 +93,12 @@ let list = []
 
 input.value = placeholder;
 submit.disabled = true;
+search_input.disabled = true
 
-const main_height = main.offsetHeight
+const home_height = home.offsetHeight
 const window_height = window.innerHeight
 
-if (main_height < window_height) main.classList.toggle('h-screen')
+if (home_height < window_height) home.classList.toggle('h-screen')
 
 input.onfocus = () => {
   if (input.value == placeholder) return input.value = "";
@@ -147,3 +151,60 @@ submit.onclick = () => {
 };
 
 // TODO Search functionality
+const nav_active = ['bg-teal-800', 'text-teal-200']
+
+nav_list.onclick = () => {
+  home.classList.add('hidden')
+  Nlist.classList.remove('hidden')
+
+  nav_list.classList.add(...nav_active)
+  nav_home.classList.remove(...nav_active)
+
+  fetchLocalStorage()
+}
+
+nav_home.onclick = () => {
+  home.classList.remove('hidden')
+  Nlist.classList.add('hidden')
+
+  nav_home.classList.add(...nav_active)
+  nav_list.classList.remove(...nav_active)
+
+  search_card.innerHTML = ``
+}
+
+function fetchLocalStorage() {
+  const a =  toObject(get_from_storage('list')) || false
+
+  if (!a)
+    return search_card.innerHTML =
+    `
+    <!-- No card text -->
+    <div class="vis w-full space-y-4 p-6 rounded-xl bg-teal-600 text-white">
+      <p class="w-max rounded-full px-4 py-1 bg-teal-200 text-teal-800">Nothing here</p>
+      <h1 id="error-content" class="cursor-pointer rounded-xl text-base">
+        You haven't created any hashtags yet
+      </h1>
+      <!-- helper text -->
+      <p id="error-tip" class="text-center text-xs text-teal-200">
+        Create a hashtag <a href="inex.html" class="text-teal-900">now!</a>
+      </p>
+    </div>
+    `
+
+  return a.forEach(list => {
+    search_card.innerHTML +=
+    `
+    <div class="w-full space-y-4 p-6 rounded-xl overflow-hidden bg-teal-200">
+      <div class="flex w-full items-end justify-between">
+        <h1 id="hash_title" class="text-xl text-teal-800 leading-none">#${list.hash}</h1>
+        <div class="text-xs text-teal-600">
+          <p id="hash_date">${list.date}</p>
+          <p id="hash_time" class="text-right">${list.time}</p>
+        </div>
+      </div>
+      <p id="hash_content" class="truncate text-teal-600">${list.content}</p>
+    </div>
+    `
+  })
+}
