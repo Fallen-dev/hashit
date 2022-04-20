@@ -4,15 +4,38 @@
     <title>HashIt | A new way to bookmark</title>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body>
-    <textarea id="textarea" cols="50" rows="1"></textarea>
-    <input id="submit" type="submit" value="HashIt!">
-    <h3 id="error"></h3>
-    <div id="text">Your text</div>
-    <h1 id="hash">Your hash is</h1>
-
+    <div class="w-full h-screen bg-teal-50 space-y-5">
+      <header class="w-full px-4 py-2 flex justify-between">
+        <div class="font-bold text-lg items-center">HashIt!</div>
+        <div class="text-sm flex cursor-pointer">
+          <a class="px-3 py-1 bg-transparent rounded-full hover:bg-teal-200 hover:text-teal-800 active:bg-teal-600 active:text-teal-200" href="#">About</a>
+          <a class="px-3 py-1 bg-transparent rounded-full hover:bg-teal-200 hover:text-teal-800 active:bg-teal-600 active:text-teal-200" href="#">How to</a>
+          <a class="px-3 py-1 bg-transparent rounded-full hover:bg-teal-200 hover:text-teal-800 active:bg-teal-600 active:text-teal-200" href="#">code</a>
+        </div>
+      </header>
+      <!-- input -->
+      <div class="px-4 space-y-5">
+        <textarea id="textarea"
+          class="w-full p-4 bg-teal-200 rounded-xl resize-none outline-none"
+        ></textarea>
+        <input type="submit" value="HashIt"
+          class="px-6 py-2 block mx-auto rounded-xl hover:rounded-full active:rounded-full outline-none transition-all ease-linear duration-300 bg-teal-800 text-teal-200 disabled:bg-gray-200 disabled:text-gray-600 hover:bg-teal-200 hover:text-teal-800"
+        />
+        <!-- only appears when error -->
+        <h3 id="error"></h3>
+        <!-- only appears when hashtag is generated -->
+        <div class="w-full p-4 space-y-2 rounded-xl bg-teal-200">
+          <p id="text" class="text-teal-600">Your hashtag is</p>
+          <h1 id="hash" class="w-min mx-auto text-4xl text-center px-6 py-2 rounded-xl text-teal-800 cursor-pointer active:bg-teal-600 active:text-teal-200"></h1>
+          <!-- helper text -->
+          <p class="pt-2 text-xs text-center text-teal-600">Click the hashtag to copy to clipboard</p>
+        </div>
+      </div>
+    </div>
     <div id="floating"></div>
 
     <nav>
