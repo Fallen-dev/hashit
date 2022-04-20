@@ -1,5 +1,5 @@
-import "./style.css";
-import { log, log_err, toString, toObject, getElement, save_to_storage } from "./utils.js"
+// import "./style.css";
+import { log, log_err, toString, toObject, getElement, save_to_storage, get_from_storage } from "./utils.js"
 
 // DOM stuff
 const input = getElement("textarea");
@@ -36,27 +36,28 @@ const createData = (generated_hash, content, type) => {
     ? navigator.language
     : "en-US";
 
-  return {
+  list.push({
     "id": localStorage.length + 1,
     "hash": generated_hash,
     "content": content,
     "type": type,
     "date": new Date().toLocaleDateString(userLocale, options),
     "time": `${new Date().getHours()} : ${new Date().getMinutes()}`,
-  };
+  });
+  return list
 };
 
 const handleInput = (generated_hash, content) => {
   if (validateURL(input.value)) {
     save_to_storage(
-      generated_hash,
+      "list",
       toString(createData(generated_hash, content, "link")),
     );
     text.innerHTML =
       `<a href="${input.value}" target="_blank">${input.value}</a>`;
   } else {
     save_to_storage(
-      generated_hash,
+      "list",
       toString(createData(generated_hash, content, "text")),
     );
     text.innerHTML = `<h3>${input.value}</h3>`;
@@ -72,6 +73,8 @@ const show_err = (error) => errortext.textContent = error;
 const placeholder = "Start pasting and tagging";
 
 let generate_hash = "";
+
+let list = []
 
 input.value = placeholder;
 submit.disabled = true;
@@ -105,5 +108,14 @@ submit.onclick = () => {
 // Search functionality
 // add later
 search.onclick = e => {
-  floatingWindow.innerHTML = `<h3>Hello</h3>`
+  floatingWindow.classList.add('search-window')
+  floatingWindow.innerHTML = 
+    `
+    <div>
+      <p id="close-search-widow">&times;</p>
+    </div>
+    `
+
+  getElement('p#close-search-widow').onclick = () => floatingWindow.classList.remove('search-window')
 }
+
