@@ -2,14 +2,23 @@
 import { log, log_err, toString, toObject, getElement, save_to_storage, get_from_storage } from "./utils.js"
 
 // DOM stuff
+const main = getElement('#main')
+
 const input = getElement("textarea");
 const submit = getElement("input[type=submit]");
-const text = getElement("div#text");
-const previewLink = getElement("p#previewlink"); //will be used later
+
+const hash_card = getElement('#hash')
+const hash_tag = getElement('#hash-tag')
+const hash_tip = getElement('#hash-tip')
+
+const error_card = getElement('#error')
+const error_title = getElement('#error-title')
+const error_content = getElement('#error-content')
+const error_tip = getElement('#error-tip')
+
 const errortext = getElement("h3#error");
 const hashStr = getElement("h1#hash");
 const search = getElement('p#search')
-const floatingWindow = getElement('div#floating')
 
 const validateURL = (url) => {
   const pattern = new RegExp(
@@ -53,14 +62,11 @@ const handleInput = (generated_hash, content) => {
       "list",
       toString(createData(generated_hash, content, "link")),
     );
-    text.innerHTML =
-      `<a href="${input.value}" target="_blank">${input.value}</a>`;
   } else {
     save_to_storage(
       "list",
       toString(createData(generated_hash, content, "text")),
     );
-    text.innerHTML = `<h3>${input.value}</h3>`;
   }
 };
 
@@ -68,7 +74,13 @@ const hash = () => (Math.random() + 1).toString(36).substring(7).toUpperCase();
 
 // Start main here
 const disable_on_keyup = () => submit.disabled = true;
-const show_err = (error) => errortext.textContent = error;
+
+const show_err = (type, content, tip) => {
+  error_title.textContent = type
+  error_content.textContent = content;
+  error_tip.textContent = tip;
+}
+
 
 const placeholder = "Start pasting and tagging";
 
@@ -79,10 +91,17 @@ let list = []
 input.value = placeholder;
 submit.disabled = true;
 
+const main_height = main.offsetHeight
+const window_height = window.innerHeight
+
+if (main_height < window_height) main.classList.toggle('h-screen')
+
 input.onfocus = () => {
   if (input.value == placeholder) return input.value = "";
   if (input.value != placeholder && input.value != "") return;
-  show_err("");
+
+  hash_tip.textContent = 'Click the hashtag to copy to clipboard'
+  show_err("", '', '');
 };
 
 input.onblur = (e) => e.target.value == "" ? input.value = placeholder : null;
@@ -100,22 +119,31 @@ submit.onclick = () => {
 
   input.value = placeholder;
 
-  hashStr.textContent = "#" + generate_hash;
+  hash_card.classList.remove('hidden')
+  hash_card.classList.add('visible')
+  hash_tag.textContent = "#" + generate_hash;
+  
+  hash_tip.textContent = 'Click the hashtag to copy to clipboard'
+
+  hash_tag.onclick = () => {
+    if (!navigator.clipboard)
+      return show_err(
+        'Clipboard error',
+        'Your browser does not support clipboard functionality',
+        'Update the browser'
+      )
+    const el = document.createElement('input')
+    el.textContent = "#" + generate_hash
+
+    el.select();
+    el.setSelectionRange(0, 99999)
+
+    navigator.clipboard.writeText(el.textContent)
+
+    hash_tip.textContent = 'Copied to clipboard'
+  }
 
   setInterval(disable_on_keyup, 100);
 };
 
-// Search functionality
-// add later
-search.onclick = e => {
-  floatingWindow.classList.add('search-window')
-  floatingWindow.innerHTML = 
-    `
-    <div>
-      <p id="close-search-widow">&times;</p>
-    </div>
-    `
-
-  getElement('p#close-search-widow').onclick = () => floatingWindow.classList.remove('search-window')
-}
-
+// TODO Search functionality
