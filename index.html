@@ -8,39 +8,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body>
-    <div class="w-full h-screen bg-teal-50 space-y-5">
-      <header class="w-full px-4 py-2 flex justify-between">
-        <div class="font-bold text-lg items-center">HashIt!</div>
-        <div class="text-sm flex cursor-pointer">
-          <a class="px-3 py-1 bg-transparent rounded-full hover:bg-teal-200 hover:text-teal-800 active:bg-teal-600 active:text-teal-200" href="#">About</a>
-          <a class="px-3 py-1 bg-transparent rounded-full hover:bg-teal-200 hover:text-teal-800 active:bg-teal-600 active:text-teal-200" href="#">How to</a>
-          <a class="px-3 py-1 bg-transparent rounded-full hover:bg-teal-200 hover:text-teal-800 active:bg-teal-600 active:text-teal-200" href="#">code</a>
+    <div id="main" class="pb-24 w-full space-y-6 bg-teal-50">
+      <header class="flex w-full justify-between px-4 py-2">
+        <div class="items-center text-base font-bold">
+          <a href="#" class="text-teal-600 pl-2">HashIt</a>
+        </div>
+        <div class="flex cursor-pointer text-sm text-teal-800">
+          <a class="rounded-full bg-transparent px-3 py-1 hover:bg-teal-200 hover:text-teal-800 active:bg-teal-600 active:text-teal-200" href="https://github.com/fallin-rain/hashit" target="_blank">code</a>
         </div>
       </header>
-      <!-- input -->
-      <div class="px-4 space-y-5">
-        <textarea id="textarea"
-          class="w-full p-4 bg-teal-200 rounded-xl resize-none outline-none"
-        ></textarea>
-        <input type="submit" value="HashIt"
-          class="px-6 py-2 block mx-auto rounded-xl hover:rounded-full active:rounded-full outline-none transition-all ease-linear duration-300 bg-teal-800 text-teal-200 disabled:bg-gray-200 disabled:text-gray-600 hover:bg-teal-200 hover:text-teal-800"
-        />
-        <!-- only appears when error -->
-        <h3 id="error"></h3>
+      <div class="space-y-6 px-6">
+        <!-- input -->
+        <textarea id="textarea" class="w-full resize-none rounded-xl bg-teal-200 px-6 py-4 outline-none"></textarea>
+        <input type="submit" value="HashIt" class="mx-auto block rounded-xl bg-teal-800 px-6 py-2 text-teal-200 outline-none transition-all duration-300 ease-linear hover:rounded-full hover:bg-teal-200 hover:text-teal-800 active:rounded-full disabled:bg-gray-200 disabled:text-gray-600" />
+        <!-- CARDS  -->
         <!-- only appears when hashtag is generated -->
-        <div class="w-full p-4 space-y-2 rounded-xl bg-teal-200">
-          <p id="text" class="text-teal-600">Your hashtag is</p>
-          <h1 id="hash" class="w-min mx-auto text-4xl text-center px-6 py-2 rounded-xl text-teal-800 cursor-pointer active:bg-teal-600 active:text-teal-200"></h1>
+        <div id="hash" class="hidden w-full space-y-2 rounded-xl bg-teal-200 p-6">
+          <p id="hash-title" class="w-max text-teal-600">Your hashtag is</p>
+          <h1 id="hash-tag" class="mx-auto w-min cursor-pointer rounded-xl px-6 py-2 text-center text-4xl text-teal-800 active:bg-teal-600 active:text-teal-200">#BL82S</h1>
           <!-- helper text -->
-          <p class="pt-2 text-xs text-center text-teal-600">Click the hashtag to copy to clipboard</p>
+          <p id="hash-tip" class="pt-1 text-center text-xs text-teal-600"></p>
+        </div>
+        <!-- ERROR -->
+        <div id="error" class="hidden w-full space-y-4 rounded-xl bg-[#ffdad4] p-6 text-[#410001]">
+          <p id="error-title" class="w-max rounded-full bg-[#ba1b1b] px-4 py-1 text-white">permission error</p>
+          <h1 id="error-content" class="cursor-pointer rounded-xl text-base">Need storage permossion to write data to the internal storage</h1>
+          <!-- helper text -->
+          <p id="error-tip" class="text-center text-xs text-[#ba1b1b]">Tip: Reload the page</p>
         </div>
       </div>
+      <!-- Nav bar -->
+      <nav id="nav" class="fixed bottom-5 left-2/4 z-50 flex -translate-x-2/4 rounded-full bg-teal-400 text-sm font-bold tracking-wide text-teal-800">
+        <p id="nav-home" class="cursor-pointer rounded-full px-6 py-2 bg-teal-800 text-teal-200">Home</p>
+      <p id="nav-list" class="cursor-pointer rounded-full px-6 py-2 bg-gray-300 text-gray-600">List</p>
+      </nav>
     </div>
-    <div id="floating"></div>
-
-    <nav>
-      <p id="search" style="cursor: pointer;">Search</p>
-    </nav>
 
     <script type="module" src="/main.js"></script>
   </body>
