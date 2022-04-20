@@ -8,24 +8,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body>
-    <div id="main" class="pb-24 w-full space-y-6 bg-teal-50">
-      <header class="flex w-full justify-between px-4 py-2">
-        <div class="items-center text-base font-bold">
-          <a href="#" class="text-teal-600 pl-2">HashIt</a>
-        </div>
-        <div class="flex cursor-pointer text-sm text-teal-800">
-          <a class="rounded-full bg-transparent px-3 py-1 hover:bg-teal-200 hover:text-teal-800 active:bg-teal-600 active:text-teal-200" href="https://github.com/fallin-rain/hashit" target="_blank">code</a>
-        </div>
-      </header>
+    <header class="fixed top-0 flex w-full justify-between z-50 p-4 bg-teal-50">
+      <div class="items-center text-base font-bold">
+        <a href="#" class="text-teal-600 pl-2 select-none">HashIt</a>
+      </div>
+      <div class="flex cursor-pointer text-sm text-teal-800">
+        <a class="rounded-full bg-transparent px-3 py-1 select-none hover:bg-teal-200 hover:text-teal-800 active:bg-teal-600 active:text-teal-200" href="https://github.com/fallin-rain/hashit" target="_blank">code</a>
+      </div>
+    </header>
+
+    <div id="home" class="py-20 w-full space-y-6 bg-teal-50">
       <div class="space-y-6 px-6">
         <!-- input -->
         <textarea id="textarea" class="w-full resize-none rounded-xl bg-teal-200 px-6 py-4 outline-none"></textarea>
-        <input type="submit" value="HashIt" class="mx-auto block rounded-xl bg-teal-800 px-6 py-2 text-teal-200 outline-none transition-all duration-300 ease-linear hover:rounded-full hover:bg-teal-200 hover:text-teal-800 active:rounded-full disabled:bg-gray-200 disabled:text-gray-600" />
+        <input type="submit" value="HashIt" class="mx-auto block rounded-xl bg-teal-800 px-6 py-2 text-teal-200 outline-none transition-all duration-300 ease-linear hover:rounded-full hover:bg-teal-200 hover:text-teal-800 active:rounded-full disabled:bg-gray-200 disabled:text-gray-600 select-none" />
         <!-- CARDS  -->
         <!-- only appears when hashtag is generated -->
         <div id="hash" class="hidden w-full space-y-2 rounded-xl bg-teal-200 p-6">
           <p id="hash-title" class="w-max text-teal-600">Your hashtag is</p>
-          <h1 id="hash-tag" class="mx-auto w-min cursor-pointer rounded-xl px-6 py-2 text-center text-4xl text-teal-800 active:bg-teal-600 active:text-teal-200">#BL82S</h1>
+          <h1 id="hash-tag" class="mx-auto w-min cursor-pointer rounded-xl px-6 py-2 text-center text-4xl text-teal-800 active:bg-teal-600 active:text-teal-200 select-none">#BL82S</h1>
           <!-- helper text -->
           <p id="hash-tip" class="pt-1 text-center text-xs text-teal-600"></p>
         </div>
@@ -37,12 +38,18 @@
           <p id="error-tip" class="text-center text-xs text-[#ba1b1b]">Tip: Reload the page</p>
         </div>
       </div>
-      <!-- Nav bar -->
-      <nav id="nav" class="fixed bottom-5 left-2/4 z-50 flex -translate-x-2/4 rounded-full bg-teal-400 text-sm font-bold tracking-wide text-teal-800">
-        <p id="nav-home" class="cursor-pointer rounded-full px-6 py-2 bg-teal-800 text-teal-200">Home</p>
-      <p id="nav-list" class="cursor-pointer rounded-full px-6 py-2 bg-gray-300 text-gray-600">List</p>
-      </nav>
     </div>
+    <!-- LIST -->
+    <div id="list" class="hidden space w-full space-y-6 bg-teal-50 px-6 py-20">
+      <input id="search-text" type="text" placeholder="Work in progress" class="w-full rounded-xl px-6 py-2 text-center select-none outline-none bg-teal-200 text-teal-800 focus-within:bg-teal-800 focus-within:text-teal-200 disabled:bg-gray-200 disabled:text-gray-600 disabled:cursor-not-allowed" />
+      <!-- search cards -->
+      <div id="search-card" class="w-full space-y-6"></div>
+    </div>
+    <!-- Nav bar -->
+    <nav id="nav" class="fixed bottom-5 left-2/4 z-50 flex -translate-x-2/4 rounded-full bg-teal-400 text-sm font-bold tracking-wide text-teal-800">
+      <p id="nav-home" class="cursor-pointer rounded-full px-6 py-2 bg-teal-800 text-teal-200 select-none">Home</p>
+      <p id="nav-list" class="cursor-pointer rounded-full px-6 py-2 select-none">List</p>
+    </nav>
 
     <script type="module" src="/main.js"></script>
   </body>
