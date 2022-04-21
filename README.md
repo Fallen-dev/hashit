@@ -1,2 +1,2 @@
 # hashit
-verion 0.3.1
+verion 0.3.2
