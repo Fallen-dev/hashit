@@ -37,7 +37,7 @@ const createData = (generated_hash, content, type) => {
   const options = {
     weekday: "long",
     year: "numeric",
-    month: "long",
+    month: "short",
     day: "numeric",
   };
 
@@ -210,12 +210,12 @@ function fetchLocalStorage() {
       <div class="flex w-full items-end justify-between">
         <h1 class="text-2xl text-teal-800 leading-none">#${list.hash}</h1>
         <div class="text-xs text-teal-600">
-          <p>${list.date}</p>
-          <p class="text-right">${list.time}</p>
+          <p>On ${list.date}</p>
+          <p class="text-right">At ${list.time}</p>
         </div>
       </div>
       <div class="mt-2 flex w-full items-end space-x-3 text-xs text-teal-800">
-        <div class="rounded border border-teal-600 px-3 py-0.5">
+        <div class="rounded-lg border border-teal-600 px-3 py-0.5">
           <p class="capitalize">${list.type}</p>
         </div>
       </div>
@@ -224,9 +224,9 @@ function fetchLocalStorage() {
     `
     getAllElement('.hash_content')
       .forEach(el => {
-        el.ondblclick = (inner_el) => {
+        el.onclick = (inner_el) => {
           inner_el.target.classList.toggle('truncate')
-          inner_el.target.classList.toggle('break-all')
+          inner_el.target.classList.toggle('break-words')
         }
       })
   })
