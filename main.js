@@ -1,4 +1,3 @@
-// import "./style.css";
 import { log, log_err, toString, toObject, getElement, save_to_storage, get_from_storage } from "./utils.js"
 
 // DOM stuff
@@ -36,6 +35,8 @@ const validateURL = (url) => {
   return !!pattern.test(url);
 };
 
+let list = []
+
 const createData = (generated_hash, content, type) => {
   const options = {
     weekday: "long",
@@ -49,12 +50,11 @@ const createData = (generated_hash, content, type) => {
     : "en-US";
 
   list.push({
-    "id": localStorage.length + 1,
     "hash": generated_hash,
     "content": content,
     "type": type,
     "date": new Date().toLocaleDateString(userLocale, options),
-    "time": `${new Date().getHours()} : ${new Date().getMinutes()}`,
+    "time": `${new Date().getHours()}:${new Date().getMinutes()}`,
   });
   return list
 };
@@ -79,6 +79,9 @@ const hash = () => (Math.random() + 1).toString(36).substring(7).toUpperCase();
 const disable_on_keyup = () => submit.disabled = true;
 
 const show_err = (type, content, tip) => {
+  error_card.classList.remove('hidden')
+  error_card.classList.add('visible')
+
   error_title.textContent = type
   error_content.textContent = content;
   error_tip.textContent = tip;
@@ -89,7 +92,6 @@ const placeholder = "Start pasting and tagging";
 
 let generate_hash = "";
 
-let list = []
 
 input.value = placeholder;
 submit.disabled = true;
@@ -100,12 +102,24 @@ const window_height = window.innerHeight
 
 if (home_height < window_height) home.classList.toggle('h-screen')
 
+// This function is used to keep the data stored in LS even after a page reload.
+// As after a page reload, the list[] becomes empty and the LS item "list" will
+// be overwritten by the createData()
+window.onload = () => {
+  const stored_list = get_from_storage('list') || false
+  if (!stored_list) return
+  toObject(stored_list).forEach(data=> list.push(data))
+
+  error_card.classList.add('hidden')
+  error_card.classList.remove('visible')
+}
+
 input.onfocus = () => {
   if (input.value == placeholder) return input.value = "";
   if (input.value != placeholder && input.value != "") return;
 
-  hash_tip.textContent = 'Click the hashtag to copy to clipboard'
-  show_err("", '', '');
+  error_card.classList.add('hidden')
+  error_card.classList.remove('visible')
 };
 
 input.onblur = (e) => e.target.value == "" ? input.value = placeholder : null;
@@ -126,7 +140,6 @@ submit.onclick = () => {
   hash_card.classList.remove('hidden')
   hash_card.classList.add('visible')
   hash_tag.textContent = "#" + generate_hash;
-  
   hash_tip.textContent = 'Click the hashtag to copy to clipboard'
 
   hash_tag.onclick = () => {
@@ -145,6 +158,8 @@ submit.onclick = () => {
     navigator.clipboard.writeText(el.textContent)
 
     hash_tip.textContent = 'Copied to clipboard'
+
+    setTimeout(() => hash_tip.textContent = 'Click the hashtag to copy to clipboard', 7000);
   }
 
   setInterval(disable_on_keyup, 100);
@@ -174,30 +189,28 @@ nav_home.onclick = () => {
 }
 
 function fetchLocalStorage() {
-  const a =  toObject(get_from_storage('list')) || false
+  const stored_list =  toObject(get_from_storage('list')) || false
 
-  if (!a)
+  if (!stored_list)
     return search_card.innerHTML =
     `
-    <!-- No card text -->
     <div class="vis w-full space-y-4 p-6 rounded-xl bg-teal-600 text-white">
       <p class="w-max rounded-full px-4 py-1 bg-teal-200 text-teal-800">Nothing here</p>
       <h1 id="error-content" class="cursor-pointer rounded-xl text-base">
         You haven't created any hashtags yet
       </h1>
-      <!-- helper text -->
       <p id="error-tip" class="text-center text-xs text-teal-200">
         Create a hashtag <a href="inex.html" class="text-teal-900">now!</a>
       </p>
     </div>
     `
 
-  return a.forEach(list => {
+  return stored_list.forEach(list => {
     search_card.innerHTML +=
     `
     <div class="w-full space-y-4 p-6 rounded-xl overflow-hidden bg-teal-200">
       <div class="flex w-full items-end justify-between">
-        <h1 id="hash_title" class="text-xl text-teal-800 leading-none">#${list.hash}</h1>
+        <h1 id="hash_title" class="text-2xl text-teal-800 leading-none">#${list.hash}</h1>
         <div class="text-xs text-teal-600">
           <p id="hash_date">${list.date}</p>
           <p id="hash_time" class="text-right">${list.time}</p>
