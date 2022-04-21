@@ -1,4 +1,6 @@
-import { log, log_err, toString, toObject, getElement, save_to_storage, get_from_storage } from "./utils.js"
+import { log, log_err, toString, toObject, getElement, getAllElement, save_to_storage, get_from_storage } from "./utils.js"
+
+import {getLinkPreview} from 'link-preview-js'
 
 // DOM stuff
 const home = getElement('#home')
@@ -23,16 +25,10 @@ const nav_home = getElement('p#nav-home')
 const nav_list = getElement('p#nav-list')
 
 const validateURL = (url) => {
-  const pattern = new RegExp(
-    "^(https?:\\/\\/)?" + // protocol
-      "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
-      "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-      "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
-      "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
-      "(\\#[-a-z\\d_]*)?$",
-    "i", // fragment locator
-  );
-  return !!pattern.test(url);
+  const res = url.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)
+
+  return (res !== null)
+
 };
 
 let list = []
@@ -98,9 +94,11 @@ submit.disabled = true;
 search_input.disabled = true
 
 const home_height = home.offsetHeight
+const Nlist_height = Nlist.offsetHeight
 const window_height = window.innerHeight
 
 if (home_height < window_height) home.classList.toggle('h-screen')
+if (Nlist_height < window_height) Nlist.classList.toggle('h-screen')
 
 // This function is used to keep the data stored in LS even after a page reload.
 // As after a page reload, the list[] becomes empty and the LS item "list" will
@@ -168,16 +166,6 @@ submit.onclick = () => {
 // TODO Search functionality
 const nav_active = ['bg-teal-800', 'text-teal-200']
 
-nav_list.onclick = () => {
-  home.classList.add('hidden')
-  Nlist.classList.remove('hidden')
-
-  nav_list.classList.add(...nav_active)
-  nav_home.classList.remove(...nav_active)
-
-  fetchLocalStorage()
-}
-
 nav_home.onclick = () => {
   home.classList.remove('hidden')
   Nlist.classList.add('hidden')
@@ -188,36 +176,58 @@ nav_home.onclick = () => {
   search_card.innerHTML = ``
 }
 
+nav_list.onclick = () => {
+  home.classList.add('hidden')
+  Nlist.classList.remove('hidden')
+
+  nav_list.classList.add(...nav_active)
+  nav_home.classList.remove(...nav_active)
+
+  fetchLocalStorage()
+}
+
 function fetchLocalStorage() {
   const stored_list =  toObject(get_from_storage('list')) || false
 
   if (!stored_list)
     return search_card.innerHTML =
     `
-    <div class="vis w-full space-y-4 p-6 rounded-xl bg-teal-600 text-white">
+    <div class="vis w-full space-y-4 p-6 rounded-2xl bg-teal-600 text-white">
       <p class="w-max rounded-full px-4 py-1 bg-teal-200 text-teal-800">Nothing here</p>
       <h1 id="error-content" class="cursor-pointer rounded-xl text-base">
         You haven't created any hashtags yet
       </h1>
       <p id="error-tip" class="text-center text-xs text-teal-200">
-        Create a hashtag <a href="inex.html" class="text-teal-900">now!</a>
+        Create a hashtag <a href="inex.html" class="font-bold">now!</a>
       </p>
     </div>
     `
 
-  return stored_list.forEach(list => {
+  stored_list.forEach(list => {
     search_card.innerHTML +=
     `
-    <div class="w-full space-y-4 p-6 rounded-xl overflow-hidden bg-teal-200">
+    <div class="w-full space-y-4 p-6 rounded-2xl overflow-hidden bg-teal-200">
       <div class="flex w-full items-end justify-between">
-        <h1 id="hash_title" class="text-2xl text-teal-800 leading-none">#${list.hash}</h1>
+        <h1 class="text-2xl text-teal-800 leading-none">#${list.hash}</h1>
         <div class="text-xs text-teal-600">
-          <p id="hash_date">${list.date}</p>
-          <p id="hash_time" class="text-right">${list.time}</p>
+          <p>${list.date}</p>
+          <p class="text-right">${list.time}</p>
         </div>
       </div>
-      <p id="hash_content" class="truncate text-teal-600">${list.content}</p>
+      <div class="mt-2 flex w-full items-end space-x-3 text-xs text-teal-800">
+        <div class="rounded border border-teal-600 px-3 py-0.5">
+          <p class="capitalize">${list.type}</p>
+        </div>
+      </div>
+      <p class="hash_content truncate text-teal-600">${list.content}</p>
     </div>
     `
+    getAllElement('.hash_content')
+      .forEach(el => {
+        el.ondblclick = (inner_el) => {
+          inner_el.target.classList.toggle('truncate')
+          inner_el.target.classList.toggle('break-all')
+        }
+      })
   })
 }
