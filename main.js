@@ -3,6 +3,9 @@ import { log, log_err, toString, toObject, getElement, getAllElement, save_to_st
 import {getLinkPreview} from 'link-preview-js'
 
 // DOM stuff
+const theme_btn = getElement('button#btn-theme')
+theme_btn.onclick = () => getElement('html').classList.toggle('dark')
+
 const home = getElement('#home')
 const Nlist = getElement('#list')
 
@@ -93,12 +96,6 @@ input.value = placeholder;
 submit.disabled = true;
 search_input.disabled = true
 
-const home_height = home.offsetHeight
-const Nlist_height = Nlist.offsetHeight
-const window_height = window.innerHeight
-
-if (home_height < window_height) home.classList.toggle('h-screen')
-if (Nlist_height < window_height) Nlist.classList.toggle('h-screen')
 
 // This function is used to keep the data stored in LS even after a page reload.
 // As after a page reload, the list[] becomes empty and the LS item "list" will
@@ -123,6 +120,9 @@ input.onfocus = () => {
 input.onblur = (e) => e.target.value == "" ? input.value = placeholder : null;
 
 input.onkeyup = (e) => {
+  input.value.length > input.offsetHeight ?
+  input.classList.add('h-80') : input.classList.remove('h-80')
+
   e.target.value == "" ? submit.disabled = true : submit.disabled = false;
 
   for (let i = 0; i <= 100; i++) clearInterval(i);
