@@ -170,7 +170,7 @@ submit.onclick = () => {
 }
 
 // TODO Search functionality
-const nav_active = ['bg-teal-800', 'text-teal-200']
+const nav_active = ['bg-teal-800', 'text-teal-200' , "dark:bg-teal-400", "dark:text-teal-800"]
 
 nav_home.onclick = () => {
   home.classList.remove('hidden')
