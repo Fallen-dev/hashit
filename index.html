@@ -1,58 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>HashIt | A new way to bookmark</title>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-    <link rel="stylesheet" href="tailwind.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  </head>
-  <body>
-    <header class="fixed top-0 flex w-full justify-between z-50 p-4 bg-teal-50 dark:bg-teal-900">
-      <div class="items-center text-base font-bold">
-        <a href="#" class="text-teal-600 dark:text-teal-300 pl-2 select-none">HashIt</a>
-      </div>
-      <div class="flex cursor-pointer text-sm text-teal-800 dark:text-teal-200">
-        <a class="rounded-full bg-transparent px-3 py-1 select-none hover:bg-teal-200 hover:text-teal-800 active:bg-teal-600 active:text-teal-200" href="https://github.com/fallin-rain/hashit" target="_blank">code</a>
 
-        <button id="btn-theme" class="rounded-full bg-transparent px-3 py-1 select-none hover:bg-teal-200 hover:text-teal-800 active:bg-teal-600 active:text-teal-200">Theme</button>
-      </div>
-    </header>
+<head>
+  <title>HashIt | A new way to bookmark</title>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="tailwind.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
 
-    <div id="home" class="py-20 w-full min-h-screen space-y-6 bg-teal-50 dark:bg-teal-900">
-      <div class="space-y-6 px-6">
-        <!-- input -->
-        <textarea rows="5" id="textarea" class="w-full resize-none rounded-2xl bg-teal-200 px-6 py-4 outline-none"></textarea>
-        <input type="submit" value="HashIt" class="mx-auto block rounded-xl bg-teal-800 px-10 py-4 font-bold text-teal-200 outline-none transition-colors duration-300 ease-linear hover:rounded-full hover:bg-teal-200 hover:text-teal-800 active:rounded-full disabled:bg-gray-200 disabled:text-gray-600 select-none" />
-        <!-- CARDS  -->
-        <!-- only appears when hashtag is generated -->
-        <div id="hash" class="hidden w-full space-y-2 rounded-2xl bg-teal-200 p-6">
-          <p id="hash-title" class="w-max text-teal-600"></p>
-          <h1 id="hash-tag" class="mx-auto w-min cursor-pointer rounded-xl px-6 py-2 text-center text-4xl text-teal-800 active:bg-teal-600 active:text-teal-200 select-none"></h1>
-          <!-- helper text -->
-          <p id="hash-tip" class="pt-1 text-center text-xs text-teal-600"></p>
-        </div>
-        <!-- ERROR -->
-        <div id="error" class="hidden w-full space-y-4 rounded-2xl bg-[#ffdad4] p-6 text-[#410001]">
-          <p id="error-title" class="w-max rounded-full bg-[#ba1b1b] px-4 py-1 text-white"></p>
-          <h1 id="error-content" class="cursor-pointer rounded-xl text-base"></h1>
-          <!-- helper text -->
-          <p id="error-tip" class="text-center text-xs text-[#ba1b1b]"></p>
-        </div>
+<body>
+  <header class="fixed top-0 z-50 flex w-full justify-between items-center bg-teal-50 p-4 dark:bg-teal-900">
+    <div class="text-base font-bold">
+      <a href="#" class="select-none pl-2 text-teal-600 dark:text-teal-300">HashIt</a>
+    </div>
+    <div class="flex space-x-2 items-center cursor-pointer text-sm text-teal-800 dark:text-teal-200">
+      <a class="select-none rounded-full bg-transparent px-3 py-1 hover:bg-teal-200 hover:text-teal-800 active:bg-teal-600 active:text-teal-200"
+        href="https://github.com/fallin-rain/hashit" target="_blank">code</a>
+
+      <button id="btn-theme"
+        class="select-none rounded-full bg-transparent px-4 py-2 bg-teal-800 text-teal-200 active:bg-teal-600 active:text-teal-200">
+        Theme
+      </button>
+    </div>
+  </header>
+
+  <div id="home" class="min-h-screen w-full space-y-6 bg-teal-50 py-20 dark:bg-teal-900">
+    <div class="space-y-6 px-6">
+      <!-- input -->
+      <textarea rows="5" id="textarea" placeholder="Paste a note or link"
+        class="w-full resize-none rounded-3xl bg-teal-200 px-6 py-4 font-code text-teal-800 outline-none placeholder:text-teal-800 dark:bg-teal-700 dark:text-teal-50 dark:placeholder:text-teal-50"></textarea>
+      <input type="submit" value="HashIt"
+        class="mx-auto block select-none rounded-2xl bg-teal-800 px-10 py-4 font-bold text-teal-200 outline-none transition-colors duration-300 ease-linear active:rounded-full disabled:bg-gray-200 disabled:text-gray-600 dark:bg-teal-300 dark:text-teal-900 dark:disabled:bg-gray-400 dark:disabled:text-gray-600" />
+      <!-- CARDS  -->
+      <!-- only appears when hashtag is generated -->
+      <div id="hash" class="hidden w-full space-y-2 rounded-3xl bg-teal-200 p-6">
+        <p id="hash-title" class="w-max text-teal-600"></p>
+        <h1 id="hash-tag"
+          class="mx-auto w-min cursor-pointer select-none rounded-xl px-6 py-2 text-center font-code text-4xl text-teal-800 active:bg-teal-600 active:text-teal-200">
+        </h1>
+        <!-- helper text -->
+        <p id="hash-tip" class="pt-1 text-center text-xs text-teal-600"></p>
+      </div>
+      <!-- ERROR -->
+      <div id="error" class="hidden w-full space-y-4 rounded-3xl bg-[#ffdad4] p-6 text-[#410001]">
+        <p id="error-title" class="w-max rounded-full bg-[#ba1b1b] px-4 py-1 text-white"></p>
+        <h1 id="error-content" class="cursor-pointer rounded-xl text-base"></h1>
+        <!-- helper text -->
+        <p id="error-tip" class="text-center text-xs text-[#ba1b1b]"></p>
       </div>
     </div>
-    <!-- LIST -->
-    <div id="list" class="hidden space w-full min-h-screen space-y-6 bg-teal-50 px-6 py-20">
-      <input id="search-text" type="text" placeholder="Work in progress" class="w-full rounded-2xl px-6 py-2 text-center select-none outline-none bg-teal-200 text-teal-800 focus-within:bg-teal-800 focus-within:text-teal-200 disabled:bg-gray-200 disabled:text-gray-600 disabled:cursor-not-allowed" />
-      <!-- search cards -->
-      <div id="search-card" class="w-full pb-24 space-y-6"></div>
-    </div>
-    <!-- Nav bar -->
-    <nav id="nav" class="fixed bottom-5 left-2/4 z-50 flex -translate-x-2/4 rounded-full bg-teal-400 dark:bg-teal-600 text-sm font-bold tracking-wide text-teal-800 dark:text-teal-200">
-      <p id="nav-home" class="cursor-pointer rounded-full px-8 py-4 bg-teal-800 text-teal-200 select-none transition-colors ease-out duration-200">Home</p>
-      <p id="nav-list" class="cursor-pointer rounded-full px-10 py-4 select-none transition-colors ease-out duration-200">List</p> <!-- px-10 to make the pills both in same width -->
-    </nav>
+  </div>
+  <!-- LIST -->
+  <div id="list" class="hidden min-h-screen w-full space-y-6 bg-teal-50 dark:bg-teal-900 px-6 py-20">
+    <input id="search-list" type="text" placeholder="Work in progress"
+      class="w-full select-none rounded-2xl bg-teal-200 px-6 py-2 text-center text-teal-800 outline-none focus-within:bg-teal-800 focus-within:text-teal-200 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-600" />
+    <!-- search cards -->
+    <div id="search-card" class="w-full space-y-6 pb-24"></div>
+  </div>
+  <!-- Nav bar -->
+  <nav id="nav"
+    class="fixed bottom-5 left-2/4 z-50 flex -translate-x-2/4 rounded-full bg-teal-400 text-teal-800 dark:bg-teal-600 dark:text-teal-200">
+    <button id="nav-home"
+      class="cursor-pointer select-none rounded-full bg-teal-800 px-8 py-4 text-sm font-bold tracking-wide text-teal-200 transition-colors duration-200 ease-out">
+      Home
+    </button>
+    <button id="nav-list"
+      class="cursor-pointer select-none rounded-full px-10 py-4 text-sm font-bold transition-colors duration-200 ease-out">
+      List
+    </button>
+    <!-- px-10 to make the pills both in same width -->
+  </nav>
 
-    <script type="module" src="/main.js"></script>
-  </body>
+  <script type="module" src="/main.js"></script>
+</body>
+
 </html>
