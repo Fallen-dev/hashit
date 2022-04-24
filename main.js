@@ -5,6 +5,7 @@ import {
   getAllElement,
   save_to_storage,
   get_from_storage,
+  log,
 } from './utils.js'
 
 // will use it in future
@@ -13,8 +14,12 @@ import {
 } from 'link-preview-js'
 
 // DOM stuff
-const theme_btn = getElement('button#btn-theme')
-theme_btn.onclick = () => getElement('html').classList.toggle('dark')
+const theme_btn = getElement('#btn-theme')
+const theme_toggle_menu = getElement('#theme-toggle-menu')
+const theme_btn_dark = getElement('#theme-btn-dark')
+const theme_btn_light = getElement('#theme-btn-light')
+
+let darkmode = false
 
 const home = getElement('#home')
 const Nlist = getElement('#list')
@@ -85,8 +90,55 @@ const handleInput = (generated_hash, content) => {
 
 const hash = () => (Math.random() + 1).toString(36).substring(7).toUpperCase()
 
+const theme_btn_active_light = ['bg-teal-800', 'text-teal-200']
+const theme_btn_active_dark = ['dark:bg-teal-200', 'dark:text-teal-800']
+const theme_btn_disabled = ['bg-teal-400', 'text-teal-800']
+
+const nav_active = ['bg-teal-800', 'text-teal-200', "dark:bg-teal-200", "dark:text-teal-800"]
 // Start main here
-const disable_on_keyup = () => (submit.disabled = true)
+
+theme_btn.onclick = () =>
+  theme_toggle_menu.classList.toggle('hidden')
+
+// change theme
+if (localStorage.darkmode == null || localStorage.darkmode == false) {
+  theme_btn_light.classList.add(...theme_btn_active_light)
+  theme_btn_light.disabled = true
+
+  theme_btn_dark.classList.add(...theme_btn_disabled)
+} else {
+  theme_btn_dark.classList.add(...theme_btn_active_dark)
+  theme_btn_dark.disabled = true
+
+  theme_btn_light.classList.add(...theme_btn_disabled)
+}
+
+theme_btn_dark.onclick = () => {
+  document.documentElement.classList.add('dark')
+  save_to_storage('darkmode', true)
+
+  theme_btn_light.classList.remove(...theme_btn_active_light)
+  theme_btn_light.classList.add(...theme_btn_disabled)
+
+  theme_btn_dark.classList.remove(...theme_btn_disabled)
+  theme_btn_dark.classList.add(...theme_btn_active_dark)
+
+  theme_btn_dark.disabled = true
+  theme_btn_light.disabled = false
+}
+theme_btn_light.onclick = () => {
+  document.documentElement.classList.remove('dark')
+  save_to_storage('darkmode', false)
+
+  theme_btn_light.classList.remove(...theme_btn_disabled)
+  theme_btn_dark.classList.add(...theme_btn_disabled)
+
+  theme_btn_dark.classList.remove(...theme_btn_active_dark)
+  theme_btn_light.classList.add(...theme_btn_active_light)
+
+  theme_btn_light.disabled = true
+  theme_btn_dark.disabled = false
+}
 
 const show_err = (type, content, tip) => {
   error_card.classList.remove('hidden')
@@ -170,7 +222,6 @@ submit.onclick = () => {
 }
 
 // TODO Search functionality
-const nav_active = ['bg-teal-800', 'text-teal-200' , "dark:bg-teal-400", "dark:text-teal-800"]
 
 nav_home.onclick = () => {
   home.classList.remove('hidden')
