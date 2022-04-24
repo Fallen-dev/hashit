@@ -18,8 +18,7 @@ const theme_btn = getElement('#btn-theme')
 const theme_toggle_menu = getElement('#theme-toggle-menu')
 const theme_btn_dark = getElement('#theme-btn-dark')
 const theme_btn_light = getElement('#theme-btn-light')
-
-let darkmode = false
+const theme_btn_system = getElement('#theme-btn-system')
 
 const home = getElement('#home')
 const Nlist = getElement('#list')
@@ -90,55 +89,75 @@ const handleInput = (generated_hash, content) => {
 
 const hash = () => (Math.random() + 1).toString(36).substring(7).toUpperCase()
 
-const theme_btn_active_light = ['bg-teal-800', 'text-teal-200']
-const theme_btn_active_dark = ['dark:bg-teal-200', 'dark:text-teal-800']
-const theme_btn_disabled = ['bg-teal-400', 'text-teal-800']
+const setSystemTheme = () => {
+  theme_btn_system.classList.add(...theme_btn_active)
+  theme_btn_dark.classList.remove(...theme_btn_active)
+  theme_btn_light.classList.remove(...theme_btn_active)
+
+  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.classList.add('dark')
+    theme = 'media'
+    return save_to_storage('theme', theme)
+  }
+  document.documentElement.classList.remove('dark')
+  theme = 'media'
+  return save_to_storage('theme', theme)
+}
+
+const theme_btn_active = ['bg-teal-800', 'text-teal-200']
 
 const nav_active = ['bg-teal-800', 'text-teal-200', "dark:bg-teal-200", "dark:text-teal-800"]
-// Start main here
 
+let currentTheme = get_from_storage('theme')
+let theme
+
+let generate_hash = ''
+
+// Start main here
 theme_btn.onclick = () =>
   theme_toggle_menu.classList.toggle('hidden')
 
-// change theme
-if (localStorage.darkmode == null || localStorage.darkmode == false) {
-  theme_btn_light.classList.add(...theme_btn_active_light)
-  theme_btn_light.disabled = true
+// check theme on page refresh
+if (currentTheme == null || currentTheme == undefined) setSystemTheme()
+else if (currentTheme == 'light') {
+  theme_btn_system.classList.remove(...theme_btn_active)
+  theme_btn_light.classList.add(...theme_btn_active)
+  theme_btn_dark.classList.remove(...theme_btn_active)
 
-  theme_btn_dark.classList.add(...theme_btn_disabled)
-} else {
-  theme_btn_dark.classList.add(...theme_btn_active_dark)
-  theme_btn_dark.disabled = true
+  document.documentElement.classList.remove('dark')
+  theme = 'light'
+  save_to_storage('theme', theme)
+} else if (currentTheme == 'dark') {
+  theme_btn_system.classList.remove(...theme_btn_active)
+  theme_btn_dark.classList.add(...theme_btn_active)
+  theme_btn_light.classList.remove(...theme_btn_active)
 
-  theme_btn_light.classList.add(...theme_btn_disabled)
+  document.documentElement.classList.add('dark')
+  theme = 'dark'
+  save_to_storage('theme', theme)
+} else if (currentTheme == 'media') setSystemTheme()
+
+theme_btn_light.onclick = () => {
+  theme_btn_system.classList.remove(...theme_btn_active)
+  theme_btn_light.classList.add(...theme_btn_active)
+  theme_btn_dark.classList.remove(...theme_btn_active)
+
+  document.documentElement.classList.remove('dark')
+  theme = 'light'
+  return save_to_storage('theme', theme)
 }
 
 theme_btn_dark.onclick = () => {
+  theme_btn_system.classList.remove(...theme_btn_active)
+  theme_btn_dark.classList.add(...theme_btn_active)
+  theme_btn_light.classList.remove(...theme_btn_active)
+
   document.documentElement.classList.add('dark')
-  save_to_storage('darkmode', true)
-
-  theme_btn_light.classList.remove(...theme_btn_active_light)
-  theme_btn_light.classList.add(...theme_btn_disabled)
-
-  theme_btn_dark.classList.remove(...theme_btn_disabled)
-  theme_btn_dark.classList.add(...theme_btn_active_dark)
-
-  theme_btn_dark.disabled = true
-  theme_btn_light.disabled = false
+  theme = 'dark'
+  return save_to_storage('theme', theme)
 }
-theme_btn_light.onclick = () => {
-  document.documentElement.classList.remove('dark')
-  save_to_storage('darkmode', false)
 
-  theme_btn_light.classList.remove(...theme_btn_disabled)
-  theme_btn_dark.classList.add(...theme_btn_disabled)
-
-  theme_btn_dark.classList.remove(...theme_btn_active_dark)
-  theme_btn_light.classList.add(...theme_btn_active_light)
-
-  theme_btn_light.disabled = true
-  theme_btn_dark.disabled = false
-}
+theme_btn_system.onclick = () => setSystemTheme()
 
 const show_err = (type, content, tip) => {
   error_card.classList.remove('hidden')
@@ -148,8 +167,6 @@ const show_err = (type, content, tip) => {
   error_content.textContent = content
   error_tip.textContent = tip
 }
-
-let generate_hash = ''
 
 submit.disabled = true
 search_input.disabled = true
@@ -166,6 +183,16 @@ window.onload = () => {
 
   error_card.classList.add('hidden')
   error_card.classList.remove('visible')
+}
+
+window.onclick = (e) => {
+  const clicked = e.target.id
+
+  if (clicked != theme_toggle_menu.id && clicked != theme_btn.id &&
+    clicked != theme_btn_dark.id && clicked != theme_btn_light.id &&
+    clicked != theme_btn_system.id
+  )
+    theme_toggle_menu.classList.add('hidden')
 }
 
 input.onfocus = () => {
@@ -189,6 +216,7 @@ submit.onclick = () => {
   handleInput(generate_hash, input.value)
 
   input.value = ''
+  submit.disabled = true
 
   hash_card.classList.remove('hidden')
   hash_card.classList.add('visible')
@@ -217,8 +245,6 @@ submit.onclick = () => {
       7000
     )
   }
-
-  setInterval(disable_on_keyup, 100)
 }
 
 // TODO Search functionality
