@@ -1,2 +1,3 @@
 # hashit
-verion 0.3.8
+
+verion 0.3.11
