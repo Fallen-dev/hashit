@@ -5,6 +5,9 @@
   <title>HashIt | A new way to bookmark</title>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="tailwind.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
@@ -26,12 +29,16 @@
     </div>
   </header>
 
-  <div id="home" class="min-h-screen w-full space-y-6 bg-teal-50 py-10 pt-28 dark:bg-teal-900">
+  <div id="home" class="min-h-screen w-full space-y-10 bg-teal-50 py-10 mt-20 dark:bg-teal-900">
+    <div class="space-y-6 px-6 text-center text-teal-200">
+      <h1 class="text-4xl font-bold">Take digital notes on paper</h1>
+      <p>Attach a digital link or text here on paper directly using HashIt!</p>
+    </div>
     <div class="space-y-6 px-6">
       <!-- input -->
       <textarea rows="5" id="textarea" placeholder="Paste a note or link"
         class="w-full resize-none rounded-3xl bg-teal-200 px-6 py-4 font-code text-teal-800 outline-none placeholder:text-teal-800 dark:bg-teal-700 dark:text-teal-50 dark:placeholder:text-teal-50"></textarea>
-      <input type="submit" value="HashIt"
+      <input type="submit" value="Hash it"
         class="mx-auto block select-none rounded-2xl bg-teal-800 px-10 py-4 font-bold text-teal-200 outline-none transition-colors duration-300 ease-linear active:rounded-full disabled:bg-gray-200 disabled:text-gray-600 dark:bg-teal-300 dark:text-teal-900 dark:disabled:bg-gray-400 dark:disabled:text-gray-600" />
       <!-- CARDS  -->
       <!-- only appears when hashtag is generated -->
@@ -61,27 +68,34 @@
   </div>
   <!-- Nav bar -->
   <nav id="nav"
-    class="absolute bottom-10 left-2/4 -translate-x-2/4 flex rounded-full z-50 shadow-md bg-teal-400 text-teal-800 dark:bg-teal-600 dark:text-teal-400">
+    class="fixed bottom-10 left-2/4 -translate-x-2/4 flex rounded-full z-50 shadow-md bg-teal-400 text-teal-800 dark:bg-teal-600 dark:text-teal-400">
     <button id="nav-home"
       class="cursor-pointer select-none rounded-full px-8 py-4 text-sm font-bold tracking-wide bg-teal-800 text-teal-200 dark:bg-teal-200 dark:text-teal-800 transition-colors duration-200 ease-out">
       Home
     </button>
     <button id="nav-list"
       class="cursor-pointer select-none rounded-full px-8 py-4 text-sm font-bold transition-colors duration-200 ease-out">
-      List
+      Lists
     </button>
   </nav>
 
   <!-- Theme toggle overlay -->
   <div id="theme-toggle-menu" class="hidden">
     <div
-      class="fixed top-20 right-4 z-50 w-min flex flex-col justify-center items-center p-6 space-y-4 rounded-3xl bg-teal-300 dark:bg-teal-600">
-      <h3 class="text-center text-xl text-teal-900 dark:text-teal-200">Choose theme</h3>
-      <p class="text-xs text-clip text-teal-600 dark:text-teal-300">Chosen theme will be saved in LocalStorage</p>
+      class="fixed top-20 right-4 z-50 w-min flex flex-col justify-center items-center p-6 space-y-6 rounded-3xl bg-teal-600">
+      <!-- Text -->
+      <div class="w-full">
+        <h3 class="mb-4 text-center text-xl text-teal-50">Appearance</h3>
+        <p class="w-full text-xs tracking-wider text-teal-200">
+          Selecting system will set the theme based on device's theme
+        </p>
+      </div>
       <!-- toggle buttons -->
-      <div class="w-full flex justify-between items-center pt-2 space-x-6">
-        <button id="theme-btn-dark" class="px-8 py-3 text-sm font-bold rounded-2xl">Dark</button>
-        <button id="theme-btn-light" class="px-8 py-3 text-sm font-bold rounded-2xl">Light</button>
+      <div
+        class="flex w-full items-center justify-between overflow-hidden mt-4 rounded-xl text-center text-sm font-bold bg-teal-200 text-teal-800">
+        <button id="theme-btn-dark" class="rounded-xl px-5 py-4">Dark</button>
+        <button id="theme-btn-system" class="rounded-xl px-4 py-4">System</button>
+        <button id="theme-btn-light" class="rounded-xl px-5 py-4">Light</button>
       </div>
     </div>
   </div>
