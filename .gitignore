@@ -7,6 +7,8 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+tailwind.css
+
 node_modules
 dist
 dist-ssr
@@ -22,4 +24,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-tailwind.css
