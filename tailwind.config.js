@@ -4,11 +4,11 @@ module.exports = {
   content: ["./**/*.{html,js}"],
   darkMode: 'class',
   theme: {
-    extend: {
-      fontFamily: {
-        code: ['text-code', ...defaultTheme.fontFamily.mono]
-      }
+    fontFamily: {
+      code: ['text-code', ...defaultTheme.fontFamily.mono],
+      sans: ['Manrope', ...defaultTheme.fontFamily.sans]
     },
+    extend: {}
   },
   plugins: [],
 }
