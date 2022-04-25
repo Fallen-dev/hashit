@@ -5,9 +5,9 @@
   <title>HashIt | A new way to bookmark</title>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;600;700&display=swap" rel="stylesheet"> -->
   <link rel="stylesheet" href="tailwind.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
@@ -29,15 +29,15 @@
     </div>
   </header>
 
-  <div id="home" class="min-h-screen w-full space-y-10 bg-teal-50 py-10 mt-20 dark:bg-teal-900">
-    <div class="space-y-6 px-6 text-center text-teal-200">
+  <div id="home" class="min-h-screen w-full space-y-10 bg-teal-50 py-10 pt-24 dark:bg-teal-900">
+    <div class="space-y-6 px-6 text-center text-teal-800 dark:text-teal-200">
       <h1 class="text-4xl font-bold">Take digital notes on paper</h1>
       <p>Attach a digital link or text here on paper directly using HashIt!</p>
     </div>
     <div class="space-y-6 px-6">
       <!-- input -->
       <textarea rows="5" id="textarea" placeholder="Paste a note or link"
-        class="w-full resize-none rounded-3xl bg-teal-200 px-6 py-4 font-code text-teal-800 outline-none placeholder:text-teal-800 dark:bg-teal-700 dark:text-teal-50 dark:placeholder:text-teal-50"></textarea>
+        class="w-full resize-none rounded-3xl px-6 py-4 font-code outline-none bg-teal-200 text-teal-800 placeholder:text-teal-800 dark:bg-teal-700 dark:text-teal-50 dark:placeholder:text-teal-50"></textarea>
       <input type="submit" value="Hash it"
         class="mx-auto block select-none rounded-2xl bg-teal-800 px-10 py-4 font-bold text-teal-200 outline-none transition-colors duration-300 ease-linear active:rounded-full disabled:bg-gray-200 disabled:text-gray-600 dark:bg-teal-300 dark:text-teal-900 dark:disabled:bg-gray-400 dark:disabled:text-gray-600" />
       <!-- CARDS  -->
@@ -61,8 +61,10 @@
   </div>
   <!-- LIST -->
   <div id="list" class="hidden min-h-screen w-full space-y-6 bg-teal-50 dark:bg-teal-900 px-6 py-10 mt-20">
-    <input id="search-list" type="text" placeholder="Work in progress"
-      class="w-full select-none rounded-2xl bg-teal-200 px-6 py-4 mb-4 text-center text-teal-800 font-code outline-none focus-within:bg-teal-800 focus-within:text-teal-200 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-600" />
+    <input id="search-list" type="text" placeholder="Search by hashtag"
+      class="w-full select-none rounded-2xl px-6 py-4 mb-4 text-center font-code outline-none bg-teal-200 text-teal-800 placeholder:text-teal-800 dark:bg-teal-700 dark:text-teal-50 dark:placeholder:text-teal-50 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-600" />
+    <!-- queried by user -->
+    <div id="query-card" class="w-full space-y-6 "></div>
     <!-- search cards -->
     <div id="search-card" class="w-full space-y-6 pb-24"></div>
   </div>

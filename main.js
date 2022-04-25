@@ -6,12 +6,16 @@ import {
   save_to_storage,
   get_from_storage,
   log,
+  isEmpty,
 } from './utils.js'
 
 // will use it in future
 import {
   getLinkPreview
 } from 'link-preview-js'
+import {
+  sepia
+} from 'tailwindcss/defaultTheme'
 
 // DOM stuff
 const theme_btn = getElement('#btn-theme')
@@ -30,6 +34,7 @@ const hash_card = getElement('#hash')
 const hash_tag = getElement('#hash-tag')
 const hash_tip = getElement('#hash-tip')
 
+const query_card = getElement('#query-card')
 const search_card = getElement('#search-card')
 const search_input = getElement('#search-list')
 
@@ -169,7 +174,6 @@ const show_err = (type, content, tip) => {
 }
 
 submit.disabled = true
-search_input.disabled = true
 
 // This function is used to keep the data stored in LS even after a page reload.
 // As after a page reload, the list[] becomes empty and the LS item "list" will
@@ -180,6 +184,7 @@ window.onload = () => {
   toObject(stored_list).forEach((data) => list.push(data))
 
   input.value = ''
+  search_input.value = ''
 
   error_card.classList.add('hidden')
   error_card.classList.remove('visible')
@@ -271,8 +276,11 @@ nav_list.onclick = () => {
 
 function fetchLocalStorage() {
   const stored_list = toObject(get_from_storage('list')) || false
+  const stored_list_reverse = stored_list.reverse()
 
-  if (!stored_list)
+  if (!stored_list) {
+    search_input.disabled = true
+
     return (search_card.innerHTML = `
     <div class="vis w-full space-y-4 p-6 rounded-3xl bg-teal-600 text-white">
       <p class="w-max rounded-full px-4 py-1 bg-teal-200 text-teal-800">Nothing here</p>
@@ -284,25 +292,69 @@ function fetchLocalStorage() {
       </p>
     </div>
     `)
+  }
 
-  const stored_list_reverse = stored_list.reverse()
+  search_input.onkeyup = (e) => {
+    if (search_input.value.length === 0 || isEmpty(search_input.value)) return query_card.innerHTML = ''
+
+    if (e.target.value == '#') return query_card.innerHTML = ''
+
+    const query = stored_list_reverse.filter(list => {
+      if (e.target.value.charAt(0) == '#')
+        return list.hash.includes(e.target.value.toUpperCase().substring(1))
+
+      return list.hash.includes(e.target.value.toUpperCase())
+    })
+
+    query_card.innerHTML = '' // clea the list section then add to the DOM
+    if (query)
+      query.forEach((list) => {
+        query_card.innerHTML += `
+        <div class="relative min-h-full w-full overflow-hidden rounded-3xl bg-teal-400">
+          <div class="w-full space-y-4 overflow-hidden p-6 bg-teal-800 text-teal-200 dark:bg-teal-400 dark:text-teal-900">
+            <div class="flex w-full select-none items-center justify-between">
+              <h1 class="font-code rounded-full bg-teal-200 dark:bg-teal-800 px-3 py-2 text-xl leading-none text-teal-800 dark:text-teal-200">#${list.hash}</h1>
+              <div class="text-right text-xs text-teal-400 dark:text-teal-700">
+                <p>On ${list.date}</p>
+                <p>At ${list.time}</p>
+              </div>
+            </div>
+            <div class="mt-2 flex w-full items-end space-x-3 text-xs">
+              <div class="rounded-lg border border-teal-400 dark:border-teal-700 px-3 py-0.5">
+                <p class="select-none capitalize text-teal-400 dark:text-teal-700">${list.type}</p>
+              </div>
+            </div>
+            <p class="hash_content font-code truncate">${list.content}</p>
+          </div>
+        </div>
+    `
+        getAllElement('.hash_content').forEach((el) => {
+          el.onclick = (inner_el) => {
+            inner_el.target.classList.toggle('truncate')
+            inner_el.target.classList.toggle('break-words')
+          }
+        })
+      })
+  }
 
   stored_list_reverse.forEach((list) => {
     search_card.innerHTML += `
-    <div class="w-full space-y-4 p-6 rounded-3xl overflow-hidden bg-teal-200 dark:bg-teal-800 dark:text-teal-200">
-      <div class="flex w-full items-end justify-between">
-        <h1 class="text-2xl font-code text-teal-800 dark:text-teal-200 leading-none">#${list.hash}</h1>
-        <div class="text-xs text-teal-600 dark:text-teal-400">
-          <p>On ${list.date}</p>
-          <p class="text-right dark:text-teal-400">At ${list.time}</p>
+    <div class="relative w-full min-h-full bg-teal-400 rounded-3xl overflow-hidden">
+      <div class="w-full space-y-4 overflow-hidden bg-teal-200 p-6 dark:bg-teal-800 dark:text-teal-200">
+        <div class="flex w-full items-end justify-between select-none">
+          <h1 class="font-code text-xl leading-none text-teal-800 dark:text-teal-200">#${list.hash}</h1>
+          <div class="text-xs text-teal-600 dark:text-teal-400">
+            <p>On ${list.date}</p>
+            <p class="text-right dark:text-teal-400">At ${list.time}</p>
+          </div>
         </div>
-      </div>
-      <div class="mt-2 flex w-full items-end space-x-3 text-xs text-teal-800 dark:text-teal-600">
-        <div class="rounded-lg border border-teal-600 dark:border-teal-400 px-3 py-0.5">
-          <p class="capitalize dark:text-teal-400">${list.type}</p>
+        <div class="mt-2 flex w-full items-end space-x-3 text-xs text-teal-800 dark:text-teal-600">
+          <div class="rounded-lg border border-teal-600 px-3 py-0.5 dark:border-teal-400">
+            <p class="capitalize dark:text-teal-400 select-none">${list.type}</p>
+          </div>
         </div>
+        <p class="hash_content font-code truncate text-teal-800 dark:text-teal-200">${list.content}</p>
       </div>
-      <p class="hash_content font-code truncate text-teal-800 dark:text-teal-200">${list.content}</p>
     </div>
     `
     getAllElement('.hash_content').forEach((el) => {
